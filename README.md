@@ -109,3 +109,59 @@ source venv/bin/activate
 ```
 
 ---
+
+## ⚙️ Step 2: Set Up Django
+
+### 📦 2.1 Install Django
+
+Make sure your virtual environment is activated before proceeding.
+
+To install Django:
+
+```bash
+pip install django
+```
+
+> ✅ Tip: It's a good practice to manage your project dependencies using a `requirements.txt` file. This makes it easy for others (or your future self) to install all required packages with a single command.
+
+To generate the `requirements.txt` file:
+
+```bash
+pip freeze > requirements.txt
+```
+
+Later, you (or anyone else) can install the dependencies using:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 🏗️ 2.2 Create a New Django Project
+
+Create your Django project named `blog_site`:
+
+```bash
+django-admin startproject blog_site .
+```
+
+> ⚠️ **Important:** Don’t forget the `.` at the end of the command!  
+> This ensures the project files are created in the current folder instead of a nested one.
+
+---
+
+### ▶️ 2.3 Run the Development Server
+
+Verify everything is set up correctly by starting the development server:
+
+```bash
+python manage.py runserver
+```
+
+Now, open your browser and visit:  
+👉 `http://127.0.0.1:8000/`
+
+You should see the Django welcome page, which confirms your project is working!
+
+---
