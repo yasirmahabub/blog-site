@@ -165,3 +165,114 @@ Now, open your browser and visit:
 You should see the Django welcome page, which confirms your project is working!
 
 ---
+
+## 🧱 Step 3: Set Up the `Post` Model
+
+In this step, you'll create a `posts` app and define a `Post` model that represents individual blog posts in your Django application.
+
+---
+
+### 🛠️ 3.1 Create the `posts` App
+
+Django encourages modular design through apps. We'll create a dedicated app named `posts` to handle all blog post-related logic.
+
+```bash
+python manage.py startapp posts
+```
+
+Now, register the new app in your Django project. Open `blog_site/settings.py` and add `"posts"` to the `INSTALLED_APPS` list:
+
+```python
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "posts",  # 👈 Register the posts app here
+]
+```
+
+---
+
+### 📝 3.2 Define the `Post` Model
+
+Open `posts/models.py` and define the structure of your `Post` model:
+
+```python
+from django.db import models
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=60)
+    content = models.TextField()
+    publish_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+```
+
+> 🧠 The `__str__` method helps display post titles meaningfully in the admin panel and shell.
+
+Now apply the migrations to create the corresponding database table:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+> ✅ Tip: After migration, you should see a `posts_post` table in `db.sqlite3`. If you're using VS Code, you can install the **SQLite Viewer** extension to inspect the database directly.
+
+---
+
+### 🧑‍💻 3.3 Register the `Post` Model in the Admin Panel
+
+To manage blog posts through the admin dashboard, register the model in `posts/admin.py`:
+
+```python
+from django.contrib import admin
+from posts.models import Post
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "publish_date")
+
+
+admin.site.register(Post, PostAdmin)
+```
+
+> 🖥️ The `list_display` attribute makes the admin list view more informative by showing key fields at a glance.
+
+---
+
+### 🔐 3.4 Access the Admin Panel & Create Posts
+
+#### 🧍 Create a Superuser
+
+Before using the Django admin panel, create a superuser account:
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to enter a username, email, and password.
+
+#### ▶️ Start the Development Server
+
+```bash
+python manage.py runserver
+```
+
+Visit the Django admin panel at:
+
+👉 `http://127.0.0.1:8000/admin/`
+
+Log in with your superuser credentials.  
+Then go to:
+
+👉 `http://127.0.0.1:8000/admin/posts/post/`
+
+From there, you can **create, edit, and delete** blog posts through the Django admin interface.
+
+---
