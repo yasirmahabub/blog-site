@@ -276,3 +276,58 @@ Then go to:
 From there, you can **create, edit, and delete** blog posts through the Django admin interface.
 
 ---
+
+## 💬 Step 4: Set Up the `Comment` Model
+
+We'll define a `Comment` model within the existing `posts` app. This keeps things simple, since comments in this case are tightly coupled with posts and don’t have complex logic beyond basic CRUD operations.
+
+---
+
+### 📝 4.1 Define the `Comment` Model
+
+Open `posts/models.py` and add the following `Comment` model definition:
+
+```python
+from django.contrib.auth.models import User
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+```
+
+> 🔗 Each comment is associated with:
+>
+> - A `Post` (using a foreign key with cascade delete)
+> - A `User` (using Django's built-in User model)
+
+Now, create and apply the migrations:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+> ✅ **Tip:** After migrating, a `posts_comment` table will be created in your SQLite database.
+
+---
+
+### 🧑‍💻 4.2 Register the `Comment` Model in the Admin Panel
+
+To manage comments via the Django admin interface, register the model in `posts/admin.py`:
+
+```python
+from posts.models import Post, Comment
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "post")
+
+
+admin.site.register(Comment, CommentAdmin)
+```
+
+> 🎛️ Now you'll be able to view, create, and manage comments from the Django admin panel.
+
+---
