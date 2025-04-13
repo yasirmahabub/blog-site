@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,53 +10,7 @@
 
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
-        header {
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        h1 {
-            margin-bottom: 5px;
-        }
-
-        .bio {
-            max-width: 600px;
-            margin: auto;
-            text-align: center;
-        }
-
-        .social-links {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .social-links a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #1a1a1a;
-            font-size: 24px;
-            transition: color 0.3s ease;
-        }
-
-        .social-links a:hover {
-            color: #0077cc;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}" />
 </head>
 
 <body>

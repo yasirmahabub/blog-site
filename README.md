@@ -725,3 +725,57 @@ You can structure this page however you want to highlight your projects or exper
 ---
 
 ✅ Now when you visit `http://127.0.0.1:8000/portfolio/` on your local server, it should render the portfolio page.
+
+---
+
+## 🗂️ Step 9: Set Up Static Files
+
+To organize and manage CSS, JavaScript, and images properly, we’ll configure a static files directory in our Django project.
+
+---
+
+### 9.1: Configure Static Files Directory
+
+Open `blog_site/settings.py` and add the following setting:
+
+```python
+STATICFILES_DIRS = [Path.joinpath(BASE_DIR, "staticfiles")]
+```
+
+This tells Django to look for static files in the `staticfiles` directory inside your project root. You can store CSS, JS, and image files here during development.
+
+---
+
+### 9.2: Move CSS to a Static File
+
+In our previous step, we added some CSS code in `portfolio.html`, it's better to move them into a dedicated CSS file.
+
+1. Create a new file: `staticfiles/css/portfolio.css`
+2. Move all your `<style>` contents from `portfolio.html` into this CSS file.
+
+---
+
+### 9.3: Update `portfolio.html` to Use Static File
+
+At the top of your `portfolio.html`, **load the static tag** like this:
+
+```django
+{% load static %}
+```
+
+Then, link your CSS file:
+
+```html
+<link rel="stylesheet" href="{% static 'css/portfolio.css' %}" />
+```
+
+---
+
+### 📝 Why `{% load static %}`?
+
+Django doesn’t automatically understand what `{% static %}` means.
+You must include `{% load static %}` at the top of any template where you're using the `{% static %}` tag — it's what enables static file linking in templates.
+
+---
+
+✅ Now your CSS is separated, clean, and reusable — and your portfolio page will use it properly!
