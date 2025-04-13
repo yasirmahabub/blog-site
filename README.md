@@ -676,3 +676,52 @@ INTERNAL_IPS = ["127.0.0.1"]
 ### ✅ You’re Done
 
 Now when you run the server in development (`DEBUG=True`), you’ll see a debug toolbar on the right side of the page. Use it to monitor SQL queries, performance, and much more as you build your blog.
+
+---
+
+## 🎨 Step 8: Add a Portfolio Page
+
+Since this is a personal blog website, it makes sense to have a portfolio page that highlights the author's professional journey and projects.
+
+---
+
+### 8.1: Define the View
+
+Open `posts/views.py` and add the following function:
+
+```python
+def portfolio_view(request):
+    return render(request, "portfolio.html")
+```
+
+> **Note:**
+> It doesn’t make sense to create a new Django app just for a simple portfolio page. That’s why we’re placing the view inside the existing `posts` app.
+
+---
+
+### 8.2: Add the URL
+
+Open `blog_site/urls.py` and add the route for the portfolio view:
+
+```python
+from posts.views import home_view, portfolio_view, post_detail_view, post_list_view
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", home_view, name="home"),
+    path("posts/", post_list_view, name="post-list"),
+    path("posts/<int:post_id>/", post_detail_view, name="post-detail"),
+    path("portfolio/", portfolio_view, name="portfolio"),
+]
+```
+
+---
+
+### 8.3: Create the Template
+
+Inside your `templates` directory, create a new file named `portfolio.html`.
+You can structure this page however you want to highlight your projects or experience.
+
+---
+
+✅ Now when you visit `http://127.0.0.1:8000/portfolio/` on your local server, it should render the portfolio page.

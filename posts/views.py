@@ -45,3 +45,7 @@ def post_detail_view(request, post_id):
 
     context = {"post": post, "comments": comments}
     return render(request, "post_detail.html", context)
+
+
+def portfolio_view(request):
+    return render(request, "portfolio.html")
