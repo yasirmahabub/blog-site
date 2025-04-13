@@ -779,3 +779,70 @@ You must include `{% load static %}` at the top of any template where you're usi
 ---
 
 ✅ Now your CSS is separated, clean, and reusable — and your portfolio page will use it properly!
+
+---
+
+## 🧱 Step 10: Set Up a `base.html` Template
+
+To avoid repeating the same HTML boilerplate across multiple templates, we’ll create a `base.html` layout file. All other templates will then **extend** this base — making your code cleaner and more maintainable.
+
+---
+
+### 🗂️ 10.1: Create `base.html`
+
+Inside the `templates/` directory, create a new file named `base.html`. This file will include all common structure such as:
+
+- `<!DOCTYPE html>`
+- `<html>`, `<head>`, and `<body>` tags
+- A `{% block content %}{% endblock %}` for dynamic page content
+- A `{% block extra_head %}{% endblock %}` for page-specific styles or scripts inside the `<head>`
+
+You don’t need to paste any actual code now — just make sure this structure exists.
+
+---
+
+### 🔄 10.2: Update Templates to Extend the Base
+
+Update templates like `home.html`, `post_list.html`, and `post_detail.html` to use the base layout.
+
+Replace the full HTML structure with:
+
+```django
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Page-specific content goes here -->
+{% endblock %}
+```
+
+This way, you only define what's unique for each page inside the `{% block content %}` tag.
+
+---
+
+### 🎨 10.3: Customize `portfolio.html`
+
+Some pages, like `portfolio.html`, may include special styles or external resources (e.g. Font Awesome, custom CSS). For those, you can also use the optional `{% block extra_head %}` to include custom code inside the `<head>`:
+
+```django
+{% extends 'base.html' %}
+
+{% block extra_head %}
+    <!-- Portfolio-specific styles and scripts -->
+{% endblock %}
+
+{% block content %}
+    <!-- Portfolio content -->
+{% endblock %}
+```
+
+This gives each page flexibility to inject custom head content without duplicating the full structure.
+
+---
+
+### 🧪 10.4: Test the Pages
+
+Make sure all your templates still load and display content correctly after applying `base.html`. Your pages should look the same but now with a cleaner structure behind the scenes.
+
+---
+
+♻️ **Why this matters:** Using a base template keeps your project **DRY (Don’t Repeat Yourself)** and makes site-wide updates much easier and faster.

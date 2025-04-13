@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Blog</title>
-</head>
-
-<body>
+{% block content %}
     {% for post in posts %}
         <h2><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
         <p>{{ post.content|truncatewords:20 }}</p>
         <p>{{ post.publish_date }}</p>
         <hr>
     {% endfor %}
-</body>
-
-</html>
+{% endblock %}

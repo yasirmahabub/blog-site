@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Blog</title>
-</head>
-
-<body>
+{% block content %}
     <h1>{{ post.title }}</h1>
     <p>{{ post.content }}</p>
     <p>Published on {{ post.publish_date }}</p>
@@ -19,6 +12,4 @@
     {% empty %}
         <p>No comments yet.</p>
     {% endfor %}
-</body>
-
-</html>
+{% endblock %}
