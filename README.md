@@ -504,3 +504,93 @@ In both the `home.html` and `post_list.html` templates, use Django’s `truncate
 > ✂️ This ensures that only a short preview (first 20 words) of each blog post is shown. It helps keep the layout clean and scannable, especially when there are long posts. Readers can click into individual posts (which we’ll add soon) to read the full content.
 
 ---
+
+## 📰 Step 7: Build the Post Detail Page
+
+When a user clicks on a post title, they should be taken to a page that shows the full content of the post along with any comments. Let’s make that happen.
+
+---
+
+### 🧱 7.1 Create the Detail View
+
+In `posts/views.py`, define a view to fetch and display a single post and its comments:
+
+```python
+from django.shortcuts import get_object_or_404, render
+
+from .models import Comment, Post
+
+
+def post_detail_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post_id=post_id).select_related("user")
+
+    context = {"post": post, "comments": comments}
+    return render(request, "post_detail.html", context)
+```
+
+#### 🤔 Why `get_object_or_404`?
+
+Using `get_object_or_404()` is a safer way to retrieve a single post. If no post exists with the given ID, it automatically raises a 404 error, avoiding server crashes from trying to access a non-existent object.
+
+#### 🚀 Why `select_related("user")`?
+
+We use `select_related("user")` when fetching comments to optimize database queries. Since each comment is linked to a user, this fetches the related user data in a single query — preventing the **N+1 query problem** and improving performance.
+
+---
+
+### 🌐 7.2 Add the URL Pattern
+
+Open `blog_site/urls.py` and register the new route:
+
+```python
+path("posts/<int:post_id>", post_detail_view, name="post-detail"),
+```
+
+---
+
+### 🧾 7.3 Create the Template
+
+Inside the `templates` directory, create `post_detail.html`. This will display the full blog post along with a list of its comments.
+
+At this stage, you can start with something simple like:
+
+```html
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>Published on {{ post.publish_date }}</p>
+
+<hr>
+<h3>Comments:</h3>
+{% for comment in comments %}
+    <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
+```
+
+---
+
+### 🔗 7.4 Make Post Titles Clickable
+
+Update the post titles in both `home.html` and `post_list.html` so that users can navigate to the post detail page:
+
+```html
+<h2><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+```
+
+---
+
+### 🧪 7.5 Test the Page
+
+1. Start the development server:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+2. Visit `http://127.0.0.1:8000/`.
+
+3. Click on a post title — you should land on the post detail page showing the full content and its comments.
+
+✅ You now have a basic blog system with a home page, post directory, and individual post pages with comments!
