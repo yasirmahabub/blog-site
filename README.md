@@ -594,3 +594,85 @@ Update the post titles in both `home.html` and `post_list.html` so that users ca
 3. Click on a post title — you should land on the post detail page showing the full content and its comments.
 
 ✅ You now have a basic blog system with a home page, post directory, and individual post pages with comments!
+
+Here’s a clean and concise optional step for setting up `django-debug-toolbar`, including why it’s useful:
+
+---
+
+## 🧰 Optional: Set Up `django-debug-toolbar`
+
+While developing your Django project, it’s often helpful to see what’s happening under the hood — database queries, cache usage, request/response details, and more. This is where `django-debug-toolbar` comes in handy.
+
+---
+
+### 💡 Why Use `django-debug-toolbar`?
+
+`django-debug-toolbar` is a powerful tool that adds a sidebar to your site showing detailed debug information for each page load. It's especially useful for:
+
+- Analyzing database queries (to avoid N+1 issues)
+- Tracking performance bottlenecks
+- Viewing request headers and session/cookie data
+- Debugging templates and static files
+
+---
+
+### ⚙️ How to Install and Configure
+
+#### 1. Install the package
+
+```bash
+pip install django-debug-toolbar
+```
+
+> 📝 Note: Don’t forget to add django-debug-toolbar==5.1.0 to your requirements.txt file!
+
+---
+
+#### 2. Add it to your Django settings
+
+In `blog_site/settings.py`:
+
+```python
+INSTALLED_APPS = [
+    # other apps
+    "debug_toolbar",
+    "posts",
+]
+
+MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware", # keep this at the top
+    # other middlewares
+]
+```
+
+---
+
+#### 3. Add the toolbar URL pattern
+
+In `blog_site/urls.py`:
+
+```python
+from django.conf import settings
+from django.urls import include, path
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
+```
+
+---
+
+#### 4. Set `INTERNAL_IPS`
+
+Still in `settings.py`, add this so the toolbar knows it's safe to display:
+
+```python
+INTERNAL_IPS = ["127.0.0.1"]
+```
+
+---
+
+### ✅ You’re Done
+
+Now when you run the server in development (`DEBUG=True`), you’ll see a debug toolbar on the right side of the page. Use it to monitor SQL queries, performance, and much more as you build your blog.
