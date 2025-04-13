@@ -36,7 +36,7 @@ git init
 
 Create a `.gitignore` file inside your project folder. Make sure to include common Python exclusions such as:
 
-```
+```plaintext
 venv/
 __pycache__/
 *.pyc
@@ -386,3 +386,65 @@ When set up, `pre-commit` will:
 > ✅ This helps catch issues early and ensures your codebase stays clean!
 
 ---
+
+## 🏠 Step 5: Set Up the Home Page
+
+Let’s build a simple home page that displays the 5 most recent blog posts.
+
+---
+
+### 🧱 5.1 Create the View
+
+In `posts/views.py`, define a function-based view to retrieve and display recent posts:
+
+```python
+from django.shortcuts import render
+
+from .models import Post
+
+
+def home_view(request):
+    """
+    Renders the homepage with the 5 most recent blog posts.
+    """
+    posts = Post.objects.order_by("-id")[:5]
+    return render(request, "home.html", {"posts": posts})
+```
+
+---
+
+### 🌐 5.2 Connect the URL
+
+Open `blog_site/urls.py` and add the root URL pattern to serve the home page:
+
+```python
+from django.contrib import admin
+from django.urls import path
+
+from posts.views import home_view
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", home_view, name="home"),
+]
+```
+
+---
+
+### 🧾 5.3 Create the Template
+
+Inside your project directory, create a `templates` folder (if it doesn’t exist already). Then create a file named `home.html` in that folder.
+
+Your folder structure should look like this:
+
+```plaintext
+blog-site/
+├── blog_site/
+├── posts/
+├── templates/
+│   └── home.html
+```
+
+The `home.html` file should contain basic HTML to loop through and display blog posts. It uses Django’s templating syntax to render each post’s title, content, and publish date.
+
+✅ Now, visiting `http://127.0.0.1:8000/` will show your most recent blog posts rendered with your HTML template.
