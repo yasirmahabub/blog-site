@@ -448,3 +448,59 @@ blog-site/
 The `home.html` file should contain basic HTML to loop through and display blog posts. It uses Django’s templating syntax to render each post’s title, content, and publish date.
 
 ✅ Now, visiting `http://127.0.0.1:8000/` will show your most recent blog posts rendered with your HTML template.
+
+---
+
+## 📚 Step 6: Create the Post List Page
+
+We’ll now create a dedicated page to display all blog posts. Think of it as your blog’s main directory. Later, we can add features like search, filters, or categories here.
+
+---
+
+### 🧱 6.1 Add the View
+
+In `posts/views.py`, add a new function-based view to retrieve and display all posts:
+
+```python
+def post_list_view(request):
+    """
+    Display the full list of blog posts.
+    """
+    posts = Post.objects.all()
+    context = {"posts": posts}
+    return render(request, "post_list.html", context)
+```
+
+---
+
+### 🌐 6.2 Connect the URL
+
+Open `blog_site/urls.py` and add a new path for this view:
+
+```python
+path("posts/", post_list_view, name="post-list"),
+```
+
+Make sure it's added to the same `urlpatterns` list where your home view is registered.
+
+---
+
+### 🧾 6.3 Create the Template
+
+Inside the `templates` folder, create a file named `post_list.html`. This will render the full list of blog posts using a layout similar to `home.html`.
+
+> 💡 While the content might feel similar to the home page, it’s a good practice to keep them separate — the homepage often contains other components (hero section, highlights, etc.), while the post list page is focused solely on browsing all blog entries.
+
+---
+
+### 📝 Note on Truncating Content
+
+In both the `home.html` and `post_list.html` templates, use Django’s `truncatewords` filter to limit the content preview:
+
+```django
+<p>{{ post.content|truncatewords:20 }}</p>
+```
+
+> ✂️ This ensures that only a short preview (first 20 words) of each blog post is shown. It helps keep the layout clean and scannable, especially when there are long posts. Readers can click into individual posts (which we’ll add soon) to read the full content.
+
+---
