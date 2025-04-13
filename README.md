@@ -8,9 +8,9 @@ This guide walks you through building a blog site using Python's Django framewor
 
 ### 📁 1.1 Create the Project Directory
 
-1. Create a folder named `blog-site`. This will be your main project directory.  
-2. Open a terminal inside the folder:  
-   - On **Windows**: Use Command Prompt or PowerShell.  
+1. Create a folder named `blog-site`. This will be your main project directory.
+2. Open a terminal inside the folder:
+   - On **Windows**: Use Command Prompt or PowerShell.
    - On **macOS/Linux**: Use the default terminal.
 
 ```bash
@@ -68,7 +68,7 @@ git push -u origin master
 
 #### 🔍 Check Python Installation
 
-Make sure Python 3.9 or higher is installed on your system.  
+Make sure Python 3.9 or higher is installed on your system.
 You can verify with:
 
 ```bash
@@ -90,7 +90,7 @@ python -m venv venv
 ```
 
 > This will create a `venv` folder inside your Project folder.
-> All Python dependencies will be installed inside the `venv` folder.  
+> All Python dependencies will be installed inside the `venv` folder.
 > This folder should be excluded from Git using `.gitignore`.
 
 ##### ▶️ Activate the Environment
@@ -146,7 +146,7 @@ Create your Django project named `blog_site`:
 django-admin startproject blog_site .
 ```
 
-> ⚠️ **Important:** Don’t forget the `.` at the end of the command!  
+> ⚠️ **Important:** Don’t forget the `.` at the end of the command!
 > This ensures the project files are created in the current folder instead of a nested one.
 
 ---
@@ -159,7 +159,7 @@ Verify everything is set up correctly by starting the development server:
 python manage.py runserver
 ```
 
-Now, open your browser and visit:  
+Now, open your browser and visit:
 👉 `http://127.0.0.1:8000/`
 
 You should see the Django welcome page, which confirms your project is working!
@@ -268,7 +268,7 @@ Visit the Django admin panel at:
 
 👉 `http://127.0.0.1:8000/admin/`
 
-Log in with your superuser credentials.  
+Log in with your superuser credentials.
 Then go to:
 
 👉 `http://127.0.0.1:8000/admin/posts/post/`
@@ -329,5 +329,60 @@ admin.site.register(Comment, CommentAdmin)
 ```
 
 > 🎛️ Now you'll be able to view, create, and manage comments from the Django admin panel.
+
+---
+
+## ✅ Optional: Set Up `pre-commit` for Code Quality
+
+To maintain clean and consistent code, you can configure [`pre-commit`](https://pre-commit.com/) to automatically run checks before every commit.
+
+### 🧪 What It Does
+
+When set up, `pre-commit` will:
+
+- Remove trailing whitespace
+- Ensure files end with a newline
+- Format code with **Black**
+- Sort imports with **isort**
+- Lint code with **Flake8**
+- Validate YAML files
+
+### ⚙️ How to Set It Up
+
+1. Make sure you have `pre-commit` installed:
+
+   ```bash
+   pip install pre-commit
+   ```
+
+2. Add the configuration files:
+   - `.pre-commit-config.yaml`
+   - `setup.cfg`
+
+   These are already included in your project directory (alongside `README.md`).
+
+3. Install the Git hook:
+
+   ```bash
+   pre-commit install
+   ```
+
+4. (Optional) Run it on all files immediately:
+
+   ```bash
+   pre-commit run --all-files
+   ```
+
+---
+
+### ⚠️ Heads-up
+
+- `pre-commit` will **run automatically before every commit**.
+- If any check fails, your commit will be blocked until the issues are fixed.
+- Either:
+  - Run `pre-commit run --all-files` to fix them all at once, or
+  - Fix and commit again.
+
+> ✅ This helps catch issues early and ensures your codebase stays clean!
 
 ---
