@@ -999,3 +999,119 @@ This renders the entire Django form as **HTML `<p>` elements**.
 You're now all set with a working signup page! ✅ When users sign up, they’ll be automatically logged in and redirected to the homepage.
 
 ---
+
+## 🔑 Step 12: Add Login and Logout Functionality
+
+Now that users can sign up, we’ll let them **log in and log out**. Django provides built-in views for these actions, so we can get this working quickly.
+
+---
+
+### 📁 12.1: Configure URLs for Login and Logout
+
+Add the login and logout paths in your `users/urls.py`:
+
+```python
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+
+from .views import signup_view
+
+urlpatterns = [
+    path("signup/", signup_view, name="signup"),
+    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
+    path("logout/", LogoutView.as_view(next_page="home"), name="logout"),
+]
+```
+
+---
+
+### 🧭 12.2: Set the Login Redirect URL
+
+Tell Django where to send users after login. Add this in `blog_site/settings.py`:
+
+```python
+LOGIN_REDIRECT_URL = "home"
+```
+
+---
+
+### 🖼️ 12.3: Create the Login Template
+
+Make a `login.html` template inside your templates folder:
+
+```html
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
+```
+
+---
+
+### 🚪 12.4: Add a Logout Link
+
+Anywhere in `base.html` template, add a logout button:
+
+```html
+{% if user.is_authenticated %}
+    <p>Hi, {{ user.username }}!</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+```
+
+---
+
+#### ⚠️ Why Django 5+ Requires POST for Logout
+
+##### 📌 Before
+
+You could log out just by visiting a link like:
+
+```html
+<a href="{% url 'logout' %}">Logout</a>
+```
+
+This triggered a GET request. The problem?
+An attacker could trick a user into clicking a hidden link and log them out without consent.
+
+---
+
+##### ✅ Now (Django 5+)
+
+To avoid this, Django requires **logout to be triggered via POST**, which can't be done just by clicking a link — it needs a deliberate action (like submitting a form).
+
+---
+
+##### ✅ How to Do It Properly
+
+Use a form with a POST method and CSRF protection:
+
+```html
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+```
+
+This ensures:
+
+- The user **intentionally** logs out.
+- CSRF protection is enforced.
+- You're following **Django’s secure default behavior**.
+
+---
+
+You now have working **login and logout functionality** 🎉
