@@ -10,6 +10,7 @@ urlpatterns = [
     path("posts/", post_list_view, name="post-list"),
     path("posts/<int:post_id>/", post_detail_view, name="post-detail"),
     path("portfolio/", portfolio_view, name="portfolio"),
+    path("users/", include("users.urls")),
 ]
 
 

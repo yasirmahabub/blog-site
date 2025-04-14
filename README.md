@@ -846,3 +846,156 @@ Make sure all your templates still load and display content correctly after appl
 ---
 
 ♻️ **Why this matters:** Using a base template keeps your project **DRY (Don’t Repeat Yourself)** and makes site-wide updates much easier and faster.
+
+---
+
+## 🔐 Step 11: Add User Authentication
+
+Now we’ll allow users to **sign up** on our blog site. For that, we’ll create a new app called `users`, handle user registration, and wire it into the project. Let’s break it down.
+
+---
+
+### 🛠️ 11.1: Create the `users` App
+
+Run the following command to create a new Django app:
+
+```bash
+python manage.py startapp users
+```
+
+Then, register it in `blog_site/settings.py`:
+
+```python
+INSTALLED_APPS = [
+    ...
+    "posts",
+    "users",
+]
+```
+
+---
+
+### 🌐 11.2: Create a `users/urls.py` File
+
+This file will manage all the URL patterns related to user accounts (signup, login, logout, profile, etc.).
+
+```python
+from django.urls import path
+
+from .views import signup_view
+
+urlpatterns = [
+    path("signup/", signup_view, name="signup"),
+]
+```
+
+Don’t forget to include this in `blog_site/urls.py`:
+
+```python
+from django.urls import include
+
+urlpatterns = [
+    ...
+    path("users/", include("users.urls")),
+]
+```
+
+**Why use `users/urls.py`?**
+Separating URLs into different files for each app helps keep our project modular and maintainable. Instead of putting everything in `blog_site/urls.py`, we define user-related URLs inside the `users` app and include them in the main URL configuration.
+
+> 📝 Note: You can also move all post URLs from `blog_site/urls.py` to `posts/urls.py`.
+
+---
+
+### 🧠 11.3: Create the Signup View
+
+Create a view in `users/views.py` to handle registration logic:
+
+```python
+from django.contrib.auth import login
+from django.shortcuts import redirect, render
+
+from .forms import SignupForm
+
+
+def signup_view(request):
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            # Log the user in
+            login(request, user)
+            return redirect("home")
+    else:
+        form = SignupForm()
+    return render(request, "signup.html", {"form": form})
+```
+
+---
+
+### 🧾 11.4: Create a Custom Signup Form
+
+We'll extend Django’s built-in `UserCreationForm` to include the email field:
+
+```python
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+class SignupForm(UserCreationForm):
+    """
+    A form that creates a user, with no privileges, from the given username,
+    email and password.
+    """
+
+    class Meta:
+        model = User
+        fields = ("username", "email")
+```
+
+---
+
+### 🖼️ 11.5: Create the Signup Page Template
+
+Finally, create a `signup.html` file inside your `templates` folder:
+
+```html
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Register</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign Up</button>
+    </form>
+{% endblock %}
+```
+
+---
+
+### 🧩 Extra: Understanding `{% csrf_token %}` and `{{ form.as_p }}`
+
+#### 🔒 `{% csrf_token %}`
+
+This tag adds a **CSRF (Cross-Site Request Forgery) token** to your form.
+
+- It's a security feature built into Django.
+- It prevents malicious websites from submitting forms on behalf of your users without their permission.
+- Always include this tag inside every form that uses `POST` in Django.
+
+#### 🎨 `{{ form.as_p }}`
+
+This renders the entire Django form as **HTML `<p>` elements**.
+
+- Each field (like username, email, password) will be wrapped in a `<p>` tag.
+- It’s a quick way to display all form fields with basic styling.
+- You can also use `form.as_table` or `form.as_ul` for different layouts, or render fields manually for full control.
+
+---
+
+You're now all set with a working signup page! ✅ When users sign up, they’ll be automatically logged in and redirected to the homepage.
+
+---
